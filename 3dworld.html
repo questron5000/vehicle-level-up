@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blade Runner-inspired 3D World</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, buildings = [];
+        let moveSpeed = 0.5;
+        let rotationSpeed = 0.002;
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.0002); // Reduced fog for better visibility
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 10, 0); // Raised camera slightly
+            camera.lookAt(0, 10, -1);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000);
+            document.body.appendChild(renderer.domElement);
+
+            // Improved lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 2);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+
+            createSkybox();
+            createCity();
+            createNeonSigns();
+            createGround();
+
+            document.addEventListener('mousemove', onMouseMove, false);
+            window.addEventListener('resize', onWindowResize, false);
+
+            animate();
+        }
+
+        function createSkybox() {
+            const loader = new THREE.TextureLoader();
+            const texture = loader.load('images/textures/sky.jpg');
+            const geometry = new THREE.SphereGeometry(500, 60, 40);
+            geometry.scale(-1, 1, 1);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture
+            });
+            const skybox = new THREE.Mesh(geometry, material);
+            scene.add(skybox);
+        }
+
+        function createCity() {
+            const loader = new THREE.TextureLoader();
+            const buildingTextures = [
+                loader.load('images/textures/metal-building.jpg'),
+                loader.load('images/textures/metal-painted.jpg'),
+                loader.load('images/textures/metal-rust.jpg'),
+                loader.load('images/textures/metal-texture.jpg')
+            ];
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+            for (let i = 0; i < 500; i++) {
+                const material = new THREE.MeshPhongMaterial({ 
+                    map: buildingTextures[Math.floor(Math.random() * buildingTextures.length)],
+                    specular: 0x111111,
+                    shininess: 30
+                });
+                const building = new THREE.Mesh(geometry, material);
+                building.position.x = Math.random() * 400 - 200;
+                building.position.z = Math.random() * 400 - 200;
+                building.scale.y = Math.random() * 100 + 10;
+                building.scale.x = Math.random() * 20 + 1;
+                building.scale.z = Math.random() * 20 + 1;
+                scene.add(building);
+                buildings.push(building);
+
+                // Add neon lights to buildings
+                addNeonToBuilding(building);
+            }
+        }
+
+        function addNeonToBuilding(building) {
+            const neonColors = [0xff00ff, 0x00ffff, 0xffff00, 0xff0000, 0x0000ff];
+            const neonGeometry = new THREE.BoxGeometry(building.scale.x * 1.1, 0.5, building.scale.z * 1.1);
+            const neonMaterial = new THREE.MeshBasicMaterial({
+                color: neonColors[Math.floor(Math.random() * neonColors.length)],
+                transparent: true,
+                opacity: 0.8
+            });
+            const neon = new THREE.Mesh(neonGeometry, neonMaterial);
+            neon.position.y = building.scale.y / 2;
+            building.add(neon);
+
+            // Add point light for neon glow
+            const light = new THREE.PointLight(neonMaterial.color, 1, 20);
+            light.position.copy(neon.position);
+            building.add(light);
+        }
+
+        function createNeonSigns() {
+            const loader = new THREE.TextureLoader();
+            const glassTexture = loader.load('images/textures/glass.jpg');
+            const neonColors = [0xff00ff, 0x00ffff, 0xffff00, 0xff0000, 0x0000ff];
+
+            for (let i = 0; i < 200; i++) { // Increased number of signs
+                const geometry = new THREE.PlaneGeometry(10, 4);
+                const material = new THREE.MeshPhongMaterial({
+                    map: glassTexture,
+                    color: neonColors[Math.floor(Math.random() * neonColors.length)],
+                    emissive: neonColors[Math.floor(Math.random() * neonColors.length)],
+                    emissiveIntensity: 1,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const sign = new THREE.Mesh(geometry, material);
+                sign.position.set(
+                    Math.random() * 400 - 200,
+                    Math.random() * 100 + 10,
+                    Math.random() * 400 - 200
+                );
+                sign.rotation.y = Math.random() * Math.PI * 2;
+                scene.add(sign);
+
+                // Add point light for neon sign glow
+                const light = new THREE.PointLight(material.color, 1, 10);
+                light.position.copy(sign.position);
+                scene.add(light);
+            }
+        }
+
+        function createGround() {
+            const loader = new THREE.TextureLoader();
+            const groundTexture = loader.load('images/textures/metal-texture.jpg');
+            groundTexture.wrapS = THREE.RepeatWrapping;
+            groundTexture.wrapT = THREE.RepeatWrapping;
+            groundTexture.repeat.set(100, 100);
+
+            const groundGeometry = new THREE.PlaneGeometry(1000, 1000);
+            const groundMaterial = new THREE.MeshPhongMaterial({ map: groundTexture });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -1;
+            scene.add(ground);
+        }
+
+        function onMouseMove(event) {
+            const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            camera.rotation.y = -mouseX * Math.PI / 4;
+        }
+
+        function moveCamera() {
+            const direction = new THREE.Vector3();
+            camera.getWorldDirection(direction);
+            camera.position.add(direction.multiplyScalar(moveSpeed));
+
+            if (Math.abs(camera.position.x) > 200 || Math.abs(camera.position.z) > 200) {
+                camera.position.set(0, 10, 0);
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            moveCamera();
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+</html>

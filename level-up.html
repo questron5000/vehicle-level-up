@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vehicle Level Up</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="start-screen" class="start-screen">
+        <h1>Vehicle Level Up</h1>
+        <button id="start-button">Start</button>
+    </div>
+    <div class="background">
+        <div class="color-blobs">
+            <div class="blob1"></div>
+            <div class="blob2"></div>
+            <div class="blob3"></div>
+        </div>
+        <!-- Remove this line -->
+        <!-- <div class="grid"></div> -->
+    </div>
+    <div class="game-container">
+        <div class="left-panel">
+            <div class="level-up-section">
+                <h1 class="section-title">LEVEL UP</h1>
+                <div class="level-info">
+                    <span class="level-text">LEVEL <span id="currentLevel">53</span></span>
+                    <div class="level-progress-bar">
+                        <div id="levelProgress" class="level-progress" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="resources">
+                    <div class="resource">
+                        <div class="resource-label">
+                            <i class="fas fa-coins"></i>
+                            Loot
+                        </div>
+                        <span id="loot">1,000</span>
+                    </div>
+                    <div class="resource">
+                        <div class="resource-label">
+                            <i class="fas fa-fire"></i>
+                            Boost
+                        </div>
+                        <span id="boost">50%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="vehicle-boosts-section">
+                <h2 class="section-title">Vehicle Boosts</h2>
+                <div class="upgrade-grid">
+                    <button class="upgrade-btn" id="upgradeSpeedBoost">
+                        <div class="left-content">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Speed Boost</span>
+                        </div>
+                        <div class="right-content">
+                            <span class="price">500</span>
+                            <span class="boost">+10%</span>
+                        </div>
+                    </button>
+                    <button class="upgrade-btn" id="upgradeArmorBoost">
+                        <div class="left-content">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Armor Boost</span>
+                        </div>
+                        <div class="right-content">
+                            <span class="price">750</span>
+                            <span class="boost">+15%</span>
+                        </div>
+                    </button>
+                    <button class="upgrade-btn" id="upgradeLuckBoost">
+                        <div class="left-content">
+                            <i class="fas fa-dice"></i>
+                            <span>Luck Boost</span>
+                        </div>
+                        <div class="right-content">
+                            <span class="price">1000</span>
+                            <span class="boost">+5%</span>
+                        </div>
+                    </button>
+                </div>
+                <button class="replenish-btn">
+                    <span>Replenish All</span>
+                </button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="vehicle">Vehicle</button>
+                <button class="tab" data-tab="crew">Crew</button>
+            </div>
+            <div class="vehicle-display">
+                <div class="grid-background"></div>
+                <img src="images/vehicle.png" alt="Vehicle" class="vehicle-image" id="displayImage">
+            </div>
+        </div>
+    </div>
+
+    <div class="volume-control">
+        <i class="fas fa-volume-up" id="volumeIcon"></i>
+        <input type="range" id="volumeSlider" min="0" max="100" value="80" class="slider">
+    </div>
+
+    <script src="script.js"></script>
+    <!-- Add this just before the closing </body> tag -->
+    <audio id="loadSound" src="sounds/load.mp3"></audio>
+    <audio id="backgroundSound" src="sounds/bkgnd.mp3" loop></audio>
+    <audio id="clickSound" src="sounds/click.mp3"></audio>
+    <audio id="hoverSound" src="sounds/hover.mp3"></audio>
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="modal-title">Insufficient Loot</h2>
+            <p class="modal-message">You don't have enough loot for this upgrade!</p>
+            <button id="modal-close" class="modal-button">OK</button>
+        </div>
+    </div>
+</body>
+</html>

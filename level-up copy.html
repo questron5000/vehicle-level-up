@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vehicle Level Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Remove the script tag from here -->
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="background">
+        <div class="color-blobs">
+            <div class="blob1"></div>
+            <div class="blob2"></div>
+            <div class="blob3"></div>
+        </div>
+        <div class="stars"></div>
+        <div class="grid"></div>
+        <!-- Remove the grid div -->
+        <div class="data-stream"></div>
+        <div class="holograms"></div>
+        <div class="glitch"></div>
+    </div>
+    <div class="game-container">
+        <header class="top-bar">
+            <div class="level-info">
+                <div class="level-text">LEVEL <span id="currentLevel">53</span></div>
+                <div class="level-progress-bar">
+                    <div id="levelProgress" class="level-progress" style="width: 70%"></div>
+                </div>
+                <div class="resource-bar">
+                    <div class="resource">
+                        <i class="fas fa-coins"></i>
+                        <span id="loot">1,000</span> <!-- Ensure the loot is formatted with a comma -->
+                    </div>
+                    <div class="resource">
+                        <i class="fas fa-fire"></i>
+                        <span id="heat">50%</span>
+                    </div>
+                </div>
+                <!-- Add this right after the .level-progress-bar div in the level 53 section -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="vehicle">
+                        <span class="tab-text">Vehicle</span>
+                        <span class="tab-glow"></span>
+                    </button>
+                    <button class="tab-btn" data-tab="crew">
+                        <span class="tab-text">Crew</span>
+                        <span class="tab-glow"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-content">
+            <div id="vehicleTab">
+                <div class="vehicle-display">
+                    <img src="images/vehicle.png" alt="Vehicle" class="vehicle-image">
+                    <div class="level-up-effect"></div>
+                </div>
+            </div>
+
+            <div id="crewTab" class="hidden">
+                <div class="vehicle-display">
+                    <img src="images/crew.png" alt="Crew" class="vehicle-image">
+                    <div class="level-up-effect"></div>
+                </div>
+            </div>
+
+            <div class="upgrade-grid" id="vehicleUpgrades">
+                <button class="upgrade-btn">
+                    <i class="fas fa-gas-pump"></i>
+                    <span>Gas Tank</span>
+                    <span class="price">$100</span>
+                    <span class="boost">+10%</span>
+                </button>
+                <button class="upgrade-btn">
+                    <i class="fas fa-cogs"></i>
+                    <span>Engine</span>
+                    <span class="price">$150</span>
+                    <span class="boost">+15%</span>
+                </button>
+                <button class="upgrade-btn">
+                    <i class="fas fa-dice"></i>
+                    <span>Luck</span>
+                    <span class="price">$200</span>
+                    <span class="boost">+5%</span>
+                </button>
+            </div>
+
+            <div class="upgrade-grid hidden" id="crewUpgrades">
+                <button class="upgrade-btn">
+                    <i class="fas fa-user-ninja"></i>
+                    <span>Stealth</span>
+                    <span class="price">$120</span>
+                    <span class="boost">+8%</span>
+                </button>
+                <button class="upgrade-btn">
+                    <i class="fas fa-fist-raised"></i>
+                    <span>Combat</span>
+                    <span class="price">$180</span>
+                    <span class="boost">+12%</span>
+                </button>
+                <button class="upgrade-btn">
+                    <i class="fas fa-brain"></i>
+                    <span>Intelligence</span>
+                    <span class="price">$200</span>
+                    <span class="boost">+7%</span>
+                </button>
+            </div>
+        </main>
+
+        <footer class="game-footer">
+            <button id="replenishAll" class="replenish-btn">
+                REPLENISH ALL
+            </button>
+        </footer>
+    </div>
+
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="modal-title">Tips</h2>
+            <p id="modal-message" class="modal-message"></p>
+            <button id="modal-confirm" class="modal-button">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Change this to load the correct script file -->
+    <script src="script.js"></script>
+</body>
+</html>
